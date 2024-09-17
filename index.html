@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #0CC0DF; /* Background color */
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 40%;
+            max-width: 800px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Shadow */
+            padding: 20px;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 5px solid #0CC0DF; /* Outer blue border color */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .qa-box {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .question {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .answer {
+            font-size: 1.2em;
+            color: #555;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Text shadow */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img id="quizImage" src="https://i.imgur.com/N392h4O.png" alt="Quiz Image">
+        <div class="qa-box">
+            <div id="question" class="question">Click the image to get a question!</div>
+            <div id="answer" class="answer"></div>
+        </div>
+    </div>
+    
+    <script>
+        const questionsAndAnswers = [
+            { question: "Who is the anti-hero in the TV series 'Breaking Bad'?", answer: "Walter White" },
+            { question: "Which character from 'Mad Men' is considered an anti-hero?", answer: "Don Draper" },
+            { question: "Who plays the anti-hero Dexter Morgan in the show 'Dexter'?", answer: "Michael C. Hall" },
+            { question: "Which Marvel anti-hero was portrayed by Ryan Reynolds in two films?", answer: "Deadpool" },
+            { question: "In 'The Sopranos', who is the central anti-hero character?", answer: "Tony Soprano" },
+            { question: "Which character in 'The Punisher' is an anti-hero vigilante?", answer: "Frank Castle" },
+            { question: "Who is the anti-hero in 'Peaky Blinders'?", answer: "Tommy Shelby" },
+            { question: "What is the name of the anti-hero in the film 'Joker'?", answer: "Arthur Fleck" },
+            { question: "Which anti-hero is the protagonist of 'The Shield'?", answer: "Vic Mackey" },
+            { question: "Who is the anti-heroine in the TV show 'Killing Eve'?", answer: "Villanelle" },
+            { question: "What is the name of the anti-hero in 'BoJack Horseman'?", answer: "BoJack Horseman" },
+            { question: "Which iconic DC character is known as an anti-hero in both comics and films?", answer: "Batman" },
+            { question: "In 'Better Call Saul', who is the central anti-hero?", answer: "Saul Goodman" },
+            { question: "Which character from 'Sons of Anarchy' is considered an anti-hero?", answer: "Jax Teller" },
+            { question: "Who is the anti-hero in the film 'Drive'?", answer: "The Driver" },
+            { question: "In 'The Dark Knight', which villain becomes an anti-hero?", answer: "Harvey Dent" },
+            { question: "Who plays the anti-hero in 'American Psycho'?", answer: "Christian Bale as Patrick Bateman" },
+            { question: "Which anti-hero is the lead character in the show 'Lucifer'?", answer: "Lucifer Morningstar" },
+            { question: "Which character in 'Watchmen' is a morally ambiguous anti-hero?", answer: "Rorschach" },
+            { question: "Who is the anti-hero in the film 'Scarface'?", answer: "Tony Montana" },
+            { question: "Which character from 'Narcos' is portrayed as an anti-hero?", answer: "Pablo Escobar" },
+            { question: "What is the name of the anti-hero in 'House of Cards'?", answer: "Frank Underwood" },
+            { question: "In 'Rick and Morty', who serves as an anti-hero figure?", answer: "Rick Sanchez" },
+            { question: "Which vigilante anti-hero is the focus of 'V for Vendetta'?", answer: "V" },
+            { question: "Which 'Game of Thrones' character can be seen as an anti-hero, especially later in the series?", answer: "Jaime Lannister" },
+            { question: "Who plays the anti-hero in 'Fight Club'?", answer: "Edward Norton as The Narrator" },
+            { question: "In 'Logan', who is the anti-hero?", answer: "Logan/Wolverine" },
+            { question: "Which character from 'The Boys' is a controversial anti-hero?", answer: "Billy Butcher" },
+            { question: "In the show 'Fargo', who is considered an anti-hero?", answer: "Lorne Malvo" },
+            { question: "Which classic anti-hero is central to 'The Godfather' series?", answer: "Michael Corleone" },
+            { question: "Which character from 'True Detective' season 1 is an anti-hero?", answer: "Rust Cohle" },
+            { question: "In the film 'Unforgiven', who plays the aging anti-hero?", answer: "Clint Eastwood as William Munny" },
+            { question: "Who is the anti-hero in the show 'Ray Donovan'?", answer: "Ray Donovan" },
+            { question: "In 'The Walking Dead', which character becomes an anti-hero over time?", answer: "Rick Grimes" },
+            { question: "Which character in 'Narcos: Mexico' is portrayed as an anti-hero?", answer: "Miguel Ángel Félix Gallardo" },
+            { question: "Who is the lead anti-hero in the 'John Wick' film series?", answer: "John Wick" },
+            { question: "Which anti-hero character from 'The Witcher' is portrayed by Henry Cavill?", answer: "Geralt of Rivia" },
+            { question: "In 'The Americans', who are the anti-heroes?", answer: "Elizabeth and Philip Jennings" },
+            { question: "Which anti-hero is the central figure in the film 'Birdman'?", answer: "Riggan Thomson" },
+            { question: "Who is the anti-hero in the film 'Taxi Driver'?", answer: "Travis Bickle" },
+            { question: "In 'Jessica Jones', who is the anti-hero?", answer: "Jessica Jones" },
+            { question: "Which character from 'Fleabag' is an anti-hero?", answer: "Fleabag" },
+            { question: "In 'Mr. Robot', who is the anti-hero hacker?", answer: "Elliot Alderson" },
+            { question: "Who is the anti-hero in the film 'No Country for Old Men'?", answer: "Anton Chigurh" },
+            { question: "In 'The Mandalorian', who is the anti-hero?", answer: "Din Djarin (The Mandalorian)" },
+            { question: "Which anti-hero appears in the film 'The Crow'?", answer: "Eric Draven" },
+            { question: "In the TV show 'You', who is the anti-hero?", answer: "Joe Goldberg" },
+            { question: "Which character in 'Preacher' is an anti-hero?", answer: "Jesse Custer" },
+            { question: "In 'Hannibal', who is the notorious anti-hero?", answer: "Hannibal Lecter" },
+            { question: "Which Marvel anti-hero does Jon Bernthal play?", answer: "The Punisher (Frank Castle)" },
+            { question: "In 'The Wire', who is the morally complex anti-hero?", answer: "Omar Little" },
+            { question: "Who plays the anti-hero in 'Raging Bull'?", answer: "Robert De Niro as Jake LaMotta" },
+            { question: "In 'Pulp Fiction', who can be considered anti-heroes?", answer: "Vincent Vega and Jules Winnfield" },
+            { question: "Who is the lead anti-hero in the movie 'Heat'?", answer: "Neil McCauley" },
+            { question: "In 'The Dark Knight Rises', which character embodies the anti-hero role?", answer: "Catwoman (Selina Kyle)" }
+        ];
+
+        const imageElement = document.getElementById("quizImage");
+        const questionElement = document.getElementById("question");
+        const answerElement = document.getElementById("answer");
+
+        imageElement.addEventListener("click", function() {
+            const randomIndex = Math.floor(Math.random() * questionsAndAnswers.length);
+            const randomQA = questionsAndAnswers[randomIndex];
+            questionElement.textContent = randomQA.question;
+            answerElement.textContent = randomQA.answer;
+        });
+    </script>
+</body>
+</html>
